@@ -1,21 +1,22 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
 from torchvision import datasets, transforms
 
-# Define the neural network model
+# Define the neural network model with convolution and max pooling layers
 class MyCNN(nn.Module):
     def __init__(self):
         super(MyCNN, self).__init__()
-        self.fc1 = nn.Linear(28 * 28, 16)
-        self.fc2 = nn.Linear(16, 10)
+        self.conv1 = nn.Conv2d(1, 8, kernel_size=3, stride=1, padding=1) # 1 input channel (grayscale), 8 output channels, 3x3 convolution
+        self.conv2 = nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1) # 8 input channels, 16 output channels, 3x3 convolution
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0) # 2x2 max pooling layer
+        self.fc1 = nn.Linear(16 * 7 * 7, 32) # 16 channels, 7x7 after pooling
+        self.fc2 = nn.Linear(32, 10) # Fully connected layer to output 10 classes
 
     def forward(self, x):
-        # Flatten the input tensor
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = self.pool(torch.relu(self.conv2(x)))
         x = torch.flatten(x, 1)
-        # Apply ReLU activation after the first fully connected layer
         x = torch.relu(self.fc1(x))
-        # Pass through the second fully connected layer
         x = self.fc2(x)
         return x
 
@@ -35,27 +36,28 @@ def get_data_loaders(batch_size=64):
     return train_loader, val_loader
 
 # Function to train the model
-def train_model(model, train_loader, criterion, optimizer):
-    model.train()
-    correct = 0
-    total = 0
-    print("Training started...")
-    # Iterate over the training data
-    for batch_idx, (data, target) in enumerate(train_loader):
-        optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
-        loss.backward()
-        optimizer.step()
-        
-        _, predicted = torch.max(output.data, 1)
-        total += target.size(0)
-        correct += (predicted == target).sum().item()
-        
-        if batch_idx % 100 == 0:
-            print(f'Batch {batch_idx}/{len(train_loader)} - Loss: {loss.item():.4f}, Accuracy: {100 * correct / total:.2f}%')
-
-    # Calculate the training accuracy
+def train_model(model, train_loader, criterion, optimizer, num_epochs=1):
+    for epoch in range(num_epochs):
+        model.train()
+        correct = 0
+        total = 0
+        print(f"Training started for epoch {epoch + 1}...")
+        # Iterate over the training data
+        for batch_idx, (data, target) in enumerate(train_loader):
+            optimizer.zero_grad()
+            output = model(data)
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+            
+            _, predicted = torch.max(output.data, 1)
+            total += target.size(0)
+            correct += (predicted == target).sum().item()
+            
+            if batch_idx % 100 == 0:
+                print(f'Epoch {epoch + 1}, Batch {batch_idx}/{len(train_loader)} - Loss: {loss.item():.4f}, Accuracy: {100 * correct / total:.2f}%')
+    
+    # Calculate the final training accuracy for the last epoch
     accuracy = 100 * correct / total
     return accuracy
 

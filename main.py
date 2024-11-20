@@ -6,6 +6,7 @@ from train import MyCNN, count_parameters, get_data_loaders, train_model, valida
 
 def main():
     batch_size = 64
+    num_epochs = 1  # Set the number of epochs to 1 for now
     train_loader, val_loader = get_data_loaders(batch_size=batch_size)
 
     # Initialize the model
@@ -13,10 +14,10 @@ def main():
     print(f'Total number of parameters: {count_parameters(model)}')
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    # Train the model for 1 epoch
-    train_accuracy = train_model(model, train_loader, criterion, optimizer)
+    # Train the model
+    train_accuracy = train_model(model, train_loader, criterion, optimizer, num_epochs)
     print(f'Training Accuracy: {train_accuracy:.2f}%')
 
     # Validate the model
