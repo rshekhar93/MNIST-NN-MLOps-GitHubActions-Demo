@@ -14,7 +14,7 @@ def main():
     print(f'Total number of parameters: {count_parameters(model)}')
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
 
     # Train the model
     train_accuracy = train_model(model, train_loader, criterion, optimizer, num_epochs)
