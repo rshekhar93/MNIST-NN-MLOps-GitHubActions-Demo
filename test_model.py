@@ -1,9 +1,9 @@
 import torch.optim as optim
 import torch.nn as nn
-from train import MyCNN, count_parameters, get_data_loaders, train_model, validate_model, set_seed
+from train import MyCNN, count_parameters, get_data_loaders, train_model, validate_model
 
 # Set the seed for reproducibility
-set_seed()
+# set_seed()
 
 def test_model():
     # Configuration
@@ -26,7 +26,7 @@ def test_model():
 
     # Define loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    optimizer = optim.Adam(model.parameters(), lr=0.006)
 
     # Train the model
     train_accuracy = train_model(model, train_loader, criterion, optimizer, num_epochs)
@@ -35,8 +35,6 @@ def test_model():
     assert train_accuracy >= accuracy_threshold, f"Model accuracy is {train_accuracy}%, which is not greater than {accuracy_threshold}%"
 
     print(f"Model achieved an accuracy of {train_accuracy}%, which meets the threshold of {accuracy_threshold}%")
-
-    return train_accuracy
 
 if __name__ == "__main__":
     test_model()

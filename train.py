@@ -6,8 +6,8 @@ from torchvision import datasets, transforms
 class MyCNN(nn.Module):
     def __init__(self):
         super(MyCNN, self).__init__()
-        self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1) # 1 input channel (grayscale), 8 output channels, 3x3 convolution
-        self.conv2 = nn.Conv2d(16, 12, kernel_size=3, stride=1, padding=1) # 8 input channels, 16 output channels, 3x3 convolution
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1) # 1 input channel (grayscale), 8 output channels, 3x3 convolution
+        self.conv2 = nn.Conv2d(32, 12, kernel_size=3, stride=1, padding=1) # 8 input channels, 16 output channels, 3x3 convolution
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0) # 2x2 max pooling layer
         self.fc1 = nn.Linear(12 * 7 * 7, 32) # 16 channels, 7x7 after pooling
         self.fc2 = nn.Linear(32, 10) # Fully connected layer to output 10 classes
