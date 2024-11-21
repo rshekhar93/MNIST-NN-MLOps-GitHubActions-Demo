@@ -36,5 +36,7 @@ def test_model():
 
     print(f"Model achieved an accuracy of {train_accuracy}%, which meets the threshold of {accuracy_threshold}%")
 
+    # return train_accuracy
+
 if __name__ == "__main__":
     test_model()
