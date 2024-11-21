@@ -84,15 +84,14 @@ def show_augmented_images(original_dataset, augmented_dataset, num_images=5):
     axes[1, 0].set_title('Augmented Images', fontsize=16)
     plt.show()
 
-
 # Function to train the model
 def train_model(model, train_loader, criterion, optimizer, num_epochs=1):
+    total_loss = 0.0
+    correct = 0
+    total = 0
     for epoch in range(num_epochs):
         model.train()
-        correct = 0
-        total = 0
         print(f"Training started for epoch {epoch + 1}...")
-        # Iterate over the training data
         for batch_idx, (data, target) in enumerate(train_loader):
             optimizer.zero_grad()
             output = model(data)
@@ -100,6 +99,7 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=1):
             loss.backward()
             optimizer.step()
             
+            total_loss += loss.item()
             _, predicted = torch.max(output.data, 1)
             total += target.size(0)
             correct += (predicted == target).sum().item()
@@ -109,7 +109,9 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=1):
     
     # Calculate the final training accuracy for the last epoch
     accuracy = 100 * correct / total
-    return accuracy
+    avg_loss = total_loss / len(train_loader)
+    return avg_loss, accuracy
+
 
 # Function to validate the model
 def validate_model(model, val_loader, criterion):
