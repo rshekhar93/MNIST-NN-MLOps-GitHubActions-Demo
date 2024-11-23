@@ -1,5 +1,7 @@
 # Neural Network with MLOps using GitHub Actions
 
+![Build Status](https://github.com/rshekhar93/MNIST-NN-MLOps-GitHubActions-Demo/actions/workflows/main.yml/badge.svg)
+
 This project showcases the integration of Machine Learning Operations (MLOps) with neural network models using GitHub Actions for continuous integration and continuous deployment (CI/CD). The primary focus is to create a neural network to classify MNIST dataset digits using the PyTorch framework and demonstrate automated testing and deployment pipelines.
 
 ## Table of Contents 
